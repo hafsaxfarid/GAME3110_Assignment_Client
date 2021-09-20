@@ -82,9 +82,8 @@ public class NetworkedClient : MonoBehaviour
             // Profs IP
             //connectionID = NetworkTransport.Connect(hostID, "192.168.2.37", socketPort, 0, out error); // server is local on network
             
-            // My local IP(s) - connects to both(tested with both)
-            //connectionID = NetworkTransport.Connect(hostID, "192.168.0.11", socketPort, 0, out error); // server is local on network
-            connectionID = NetworkTransport.Connect(hostID, "192.168.0.1", socketPort, 0, out error); // server is local on network
+            // My local IP
+            connectionID = NetworkTransport.Connect(hostID, "192.168.0.11", socketPort, 0, out error); // server is local on network
 
             if (error == 0)
             {
