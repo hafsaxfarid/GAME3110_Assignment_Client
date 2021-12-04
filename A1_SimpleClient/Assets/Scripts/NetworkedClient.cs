@@ -112,6 +112,4 @@ public class NetworkedClient : MonoBehaviour
     {
         return isConnected;
     }
-
-
 }

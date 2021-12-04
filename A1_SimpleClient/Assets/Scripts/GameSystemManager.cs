@@ -6,17 +6,12 @@ using TMPro;
 
 public class GameSystemManager : MonoBehaviour
 {
-    GameObject usernameInputField;
-
-    GameObject passwordInputField;
-
-    GameObject createToggle;
-    
-    GameObject loginToggle;
-    
-    GameObject submitButton;
-
-    GameObject networkClient;
+    GameObject usernameInputField,
+        passwordInputField,
+        createToggle,
+        loginToggle,
+        submitButton,
+        networkClient;
 
     void Start()
     {
@@ -59,7 +54,7 @@ public class GameSystemManager : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     public void CreateToggle(bool newValue)
@@ -69,7 +64,7 @@ public class GameSystemManager : MonoBehaviour
 
     public void LoginToggle(bool newValue)
     {
-        loginToggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
+        createToggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
     }
 
     public void SubmitButtonPressed()
@@ -79,14 +74,14 @@ public class GameSystemManager : MonoBehaviour
 
         if(loginToggle.GetComponent<Toggle>().isOn)
         {
-            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToSeverSignifiers.CreateAccount + ", Name: " + n + " Password: " + p);
+            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToSeverSignifiers.Login + "," + n + "," + p);
         }
-        else
+        else if (createToggle.GetComponent<Toggle>().isOn)
         {
-            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToSeverSignifiers.CreateAccount + ", Name: " + n + " Password: " + p);
+            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToSeverSignifiers.CreateAccount + "," + n + "," + p);
         }
 
-        //Debug.Log(ClientToSeverSignifiers.CreateAccount + ", Name: " + n + " Password: " + p);
+        Debug.Log(ClientToSeverSignifiers.CreateAccount + ", Name: " + n + " Password: " + p);
     }
 }
 
