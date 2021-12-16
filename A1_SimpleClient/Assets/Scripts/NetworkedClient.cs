@@ -17,6 +17,8 @@ public class NetworkedClient : MonoBehaviour
     bool isConnected = false;
     int ourClientID;
 
+    string myConnectionIP = "192.168.0.11";
+
     GameObject gameSystemManager;
 
     // Start is called before the first frame update
@@ -30,7 +32,6 @@ public class NetworkedClient : MonoBehaviour
             {
                 gameSystemManager = go;
             }
-
         }
         Connect();
     }
@@ -74,7 +75,6 @@ public class NetworkedClient : MonoBehaviour
     
     private void Connect()
     {
-
         if (!isConnected)
         {
             Debug.Log("Attempting to create connection");
@@ -88,18 +88,14 @@ public class NetworkedClient : MonoBehaviour
             hostID = NetworkTransport.AddHost(topology, 0);
             Debug.Log("Socket open.  Host ID = " + hostID);
 
-            // Profs IP
-            //connectionID = NetworkTransport.Connect(hostID, "192.168.2.37", socketPort, 0, out error); // server is local on network
-            
             // My local IP
-            connectionID = NetworkTransport.Connect(hostID, "192.168.0.11", socketPort, 0, out error); // server is local on network
+            connectionID = NetworkTransport.Connect(hostID, myConnectionIP, socketPort, 0, out error); // server is local on network
 
             if (error == 0)
             {
                 isConnected = true;
 
                 Debug.Log("Connected, id = " + connectionID);
-
             }
         }
     }
@@ -131,9 +127,11 @@ public class NetworkedClient : MonoBehaviour
             {
                 gameSystemManager.GetComponent<GameSystemManager>().ChangeGameState(GameStates.FindGameRoom);
             }
-
         }
-
+        else if(signifier == SeverToClientSignifiers.TicTacToeGameStarted)
+        {
+            gameSystemManager.GetComponent<GameSystemManager>().ChangeGameState(GameStates.PlayingTicTacToe);
+        }
     }
 
     public bool IsConnected()
@@ -145,13 +143,15 @@ public class NetworkedClient : MonoBehaviour
 public static class ClientToSeverSignifiers
 {
     public const int Login = 1;
-
     public const int CreateAccount = 2;
+    public const int LookingForGameRoom = 3;
+    public const int PlayingTicTacToe = 4;
 }
 
 public static class SeverToClientSignifiers
 {
     public const int LoginResponse = 1;
+    public const int TicTacToeGameStarted = 2;
 }
 
 public static class LoginResponses

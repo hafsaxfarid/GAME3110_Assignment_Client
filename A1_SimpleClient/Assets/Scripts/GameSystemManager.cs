@@ -25,7 +25,19 @@ public class GameSystemManager : MonoBehaviour
 
         foreach(GameObject go in allObjects)
         {
-            if(go.name == "UsernameInput")
+            if (go.name == "LoginInfo")
+            {
+                loginInfoUI = go;
+            }
+            else if (go.name == "FindGameInfo")
+            {
+                findGameRoomInfoUI = go;
+            }
+            else if (go.name == "TicTacToeRoomInfo")
+            {
+                ticTacToeRoomInfoUI = go;
+            }
+            else if(go.name == "UsernameInput")
             {
                 usernameInputField = go;
             }
@@ -57,18 +69,6 @@ public class GameSystemManager : MonoBehaviour
             {
                 makeMoveButton = go;
             }
-            else if(go.name == "LoginInfo")
-            {
-                loginInfoUI = go;
-            }
-            else if(go.name == "FindGameInfo")
-            {
-                findGameRoomInfoUI = go;
-            }
-            else if(go.name == "TicTacToeRoomInfo")
-            {
-                ticTacToeRoomInfoUI = go;
-            }
         }
 
         ChangeGameState(GameStates.LoginState);
@@ -79,8 +79,8 @@ public class GameSystemManager : MonoBehaviour
 
         submitButton.GetComponent<Button>().onClick.AddListener(SubmitButtonPressed);
 
-        //findGameButton.GetComponent<Button>().onClick.AddListener(FindGameButtonPressed);
-        //makeMoveButton.GetComponent<Button>().onClick.AddListener(MakeMoveButtonPressed);
+        findGameButton.GetComponent<Button>().onClick.AddListener(FindGameButtonPressed);
+        makeMoveButton.GetComponent<Button>().onClick.AddListener(MakeMoveButtonPressed);
 
     }
 
@@ -119,12 +119,14 @@ public class GameSystemManager : MonoBehaviour
 
     private void FindGameButtonPressed()
     {
-
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToSeverSignifiers.LookingForGameRoom + ",");
+        ChangeGameState(GameStates.LookingForGameRoom);
     }
 
     private void MakeMoveButtonPressed()
     {
-
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToSeverSignifiers.PlayingTicTacToe + ",");
+        //ChangeGameState(GameStates.PlayingTicTacToe);
     }
 
     public void ChangeGameState(int newState)
@@ -141,7 +143,7 @@ public class GameSystemManager : MonoBehaviour
         {
             findGameRoomInfoUI.SetActive(true);
         }
-        else if(newState == GameStates.WaitingForGameRoom)
+        else if(newState == GameStates.LookingForGameRoom)
         {
 
         }
@@ -158,7 +160,7 @@ public static class GameStates
 
     public const int FindGameRoom = 2;
     
-    public const int WaitingForGameRoom = 3;
+    public const int LookingForGameRoom = 3;
     
     public const int PlayingTicTacToe = 4;
 }
