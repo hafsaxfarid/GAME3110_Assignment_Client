@@ -25,19 +25,7 @@ public class GameSystemManager : MonoBehaviour
 
         foreach(GameObject go in allObjects)
         {
-            if (go.name == "LoginInfo")
-            {
-                loginInfoUI = go;
-            }
-            else if (go.name == "FindGameInfo")
-            {
-                findGameRoomInfoUI = go;
-            }
-            else if (go.name == "TicTacToeRoomInfo")
-            {
-                ticTacToeRoomInfoUI = go;
-            }
-            else if(go.name == "UsernameInput")
+            if(go.name == "UsernameInput")
             {
                 usernameInputField = go;
             }
@@ -68,6 +56,18 @@ public class GameSystemManager : MonoBehaviour
             else if(go.name == "MakeMoveButton")
             {
                 makeMoveButton = go;
+            }
+            else if (go.name == "LoginInfo")
+            {
+                loginInfoUI = go;
+            }
+            else if (go.name == "FindGameInfo")
+            {
+                findGameRoomInfoUI = go;
+            }
+            else if (go.name == "TicTacToeRoomInfo")
+            {
+                ticTacToeRoomInfoUI = go;
             }
         }
 
@@ -106,27 +106,26 @@ public class GameSystemManager : MonoBehaviour
 
         if(loginToggle.GetComponent<Toggle>().isOn)
         {
-            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToSeverSignifiers.Login + "," + n + "," + p);
+            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.Login + "," + n + "," + p);
         }
         else if (createToggle.GetComponent<Toggle>().isOn)
         {
-            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToSeverSignifiers.CreateAccount + "," + n + "," + p);
+            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.CreateAccount + "," + n + "," + p);
         }
 
-        Debug.Log(ClientToSeverSignifiers.CreateAccount + ", Name: " + n + " Password: " + p);
+        Debug.Log(ClientToServerSignifiers.CreateAccount + ", Name: " + n + " Password: " + p);
     }
 
 
     private void FindGameButtonPressed()
     {
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToSeverSignifiers.LookingForGameRoom + ",");
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.LookingForGameRoom + ",");
         ChangeGameState(GameStates.LookingForGameRoom);
     }
 
     private void MakeMoveButtonPressed()
     {
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToSeverSignifiers.PlayingTicTacToe + ",");
-        //ChangeGameState(GameStates.PlayingTicTacToe);
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.PlayingTicTacToe + ",");
     }
 
     public void ChangeGameState(int newState)
@@ -145,7 +144,7 @@ public class GameSystemManager : MonoBehaviour
         }
         else if(newState == GameStates.LookingForGameRoom)
         {
-
+            
         }
         else if(newState == GameStates.PlayingTicTacToe)
         {
@@ -157,10 +156,7 @@ public class GameSystemManager : MonoBehaviour
 public static class GameStates
 {
     public const int LoginState = 1;
-
     public const int FindGameRoom = 2;
-    
     public const int LookingForGameRoom = 3;
-    
     public const int PlayingTicTacToe = 4;
 }

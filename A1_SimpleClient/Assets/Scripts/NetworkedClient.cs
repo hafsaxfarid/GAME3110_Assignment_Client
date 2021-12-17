@@ -119,7 +119,7 @@ public class NetworkedClient : MonoBehaviour
 
         int signifier = int.Parse(csv[0]);
 
-        if (signifier == SeverToClientSignifiers.LoginResponse)
+        if (signifier == ServerToClientSignifiers.LoginResponse)
         {
             int loginResultSignifier = int.Parse(csv[1]);
 
@@ -128,9 +128,13 @@ public class NetworkedClient : MonoBehaviour
                 gameSystemManager.GetComponent<GameSystemManager>().ChangeGameState(GameStates.FindGameRoom);
             }
         }
-        else if(signifier == SeverToClientSignifiers.TicTacToeGameStarted)
+        else if(signifier == ServerToClientSignifiers.TicTacToeGameStarted)
         {
             gameSystemManager.GetComponent<GameSystemManager>().ChangeGameState(GameStates.PlayingTicTacToe);
+        }
+        else if(signifier == ServerToClientSignifiers.OpponentTicTacToePlay)
+        {
+            Debug.Log("Opponent made a move");
         }
     }
 
@@ -140,7 +144,7 @@ public class NetworkedClient : MonoBehaviour
     }
 }
 
-public static class ClientToSeverSignifiers
+public static class ClientToServerSignifiers
 {
     public const int Login = 1;
     public const int CreateAccount = 2;
@@ -148,10 +152,11 @@ public static class ClientToSeverSignifiers
     public const int PlayingTicTacToe = 4;
 }
 
-public static class SeverToClientSignifiers
+public static class ServerToClientSignifiers
 {
     public const int LoginResponse = 1;
     public const int TicTacToeGameStarted = 2;
+    public const int OpponentTicTacToePlay = 3;
 }
 
 public static class LoginResponses
